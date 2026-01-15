@@ -7,7 +7,7 @@ A static frontend hosted on Amazon S3 sends event data to a REST API exposed thr
 
 ## Architecture
   ![core serverless architecture di](<architecture/core flow architecture.png>)
-  [architecture readme!](architecture/architecture.md) (breif desciption about the architecture core flow of the project)
+  [architecture readme!](architecture/architecture.md) (brief description about the architecture core flow of the project)
   
 
 ## Tech Stack
