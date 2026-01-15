@@ -54,7 +54,7 @@ Benefits:
  - No AWS credentials are exposed to the frontend
  - API Gateway acts as the controlled public entry point
 
-## Deployment
+## Deployment (will be updated as project finishes updated due : 19 jan 2026)
 - Prerequisites
 - High-level deploy steps (no commands yet)
 
