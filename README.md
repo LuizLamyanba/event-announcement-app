@@ -6,7 +6,7 @@ The Event Announcement App is a serverless, event-driven web application designe
 A static frontend hosted on Amazon S3 sends event data to a REST API exposed through Amazon API Gateway. The API triggers an AWS Lambda function that processes the request and publishes notifications to Amazon SNS.
 
 ## Architecture
-  
+  ![core serverless architecture di](<architecture/core flow architecture.png>)
 
 ## Tech Stack
 ### AWS Services
