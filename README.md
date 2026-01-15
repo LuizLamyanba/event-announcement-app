@@ -9,7 +9,7 @@ A static frontend hosted on Amazon S3 sends event data to a REST API exposed thr
   
 
 ## Tech Stack
-# AWS Services
+### AWS Services
 
  - Amazon S3 – Static website hosting
  - Amazon API Gateway – REST API
@@ -21,20 +21,20 @@ A static frontend hosted on Amazon S3 sends event data to a REST API exposed thr
  - Python (Lambda logic)
  - HTML, CSS, JavaScript (Frontend)
 
-# AWS CLI
+### AWS CLI
  - boto3 (AWS SDK for Python)
 
 ## How It Works
-# Frontend flow
+#### Frontend flow
  - Collects event details from the user
  - Sends HTTP requests to the API Gateway endpoint
  - Contains no AWS credentials or business logic  
 
-# Backend flow
+#### Backend flow
  - API Gateway receives requests and forwards them to Lambda
  -Lambda validates input, formats the message, and triggers SNS
 
-# Notifications
+#### Notifications
  - Amazon SNS broadcasts event announcements to subscribed email addresses
  - The application remains unaware of subscribers, ensuring decoupling
 
