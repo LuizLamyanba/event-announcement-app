@@ -28,7 +28,7 @@ Each component has a clearly defined responsibility, ensuring a clean separation
 The diagram visually represents how requests flow through the system from the user interface
 to the notification layer.
 
-![core serverless architecture di](<architecture/core flow architecture.png>)
+![core serverless architecture di](https://github.com/LuizLamyanba/event-announcement-app/blob/main/architecture/core%20flow%20architecture.png)
 
 
 ---
