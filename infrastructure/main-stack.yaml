@@ -1,0 +1,121 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Phase 1 Core Backend Stack for Event Announcement Application.
+  Includes IAM Role, SNS Topic, Lambda Function, and API Gateway.
+
+Parameters:
+  NotificationEmail:
+    Type: String
+    Description: Email address to subscribe to SNS Topic
+
+Resources:
+
+  # -------------------------------
+  # 1. SNS Topic
+  # -------------------------------
+  EventNotificationTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: event-announcement-topic
+
+  EventNotificationSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: email
+      Endpoint: !Ref NotificationEmail
+      TopicArn: !Ref EventNotificationTopic
+
+  # -------------------------------
+  # 2. IAM Role for Lambda
+  # -------------------------------
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: event-announcement-lambda-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: lambda-logging-and-sns
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                Resource: !Ref EventNotificationTopic
+
+  # -------------------------------
+  # 3. Lambda Function
+  # -------------------------------
+  CreateEventFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: create-event-function
+      Runtime: python3.11
+      Handler: app.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 10
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref EventNotificationTopic
+      Code:
+        S3Bucket: event-announcement-lambda-control-169
+        S3Key: create-event.zip
+
+  # -------------------------------
+  # 4. API Gateway (REST API)
+  # -------------------------------
+  EventApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: EventAnnouncementApi
+
+  CreateEventResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref EventApi
+      ParentId: !GetAtt EventApi.RootResourceId
+      PathPart: create-event
+
+  CreateEventMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref EventApi
+      ResourceId: !Ref CreateEventResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateEventFunction.Arn}/invocations
+
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref CreateEventFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${EventApi}/*/POST/create-event
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn: CreateEventMethod
+    Properties:
+      RestApiId: !Ref EventApi
+      StageName: prod
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub https://${EventApi}.execute-api.${AWS::Region}.amazonaws.com/prod/create-event
