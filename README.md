@@ -8,6 +8,12 @@ A static frontend hosted on Amazon S3 sends event data to a REST API exposed thr
 ## Architecture
   ![core serverless architecture di](<architecture/core flow architecture.png>)
   [architecture readme!](architecture/architecture.md) (brief description about the architecture core flow of the project)
+
+#### Core Flow
+1. A client sends an event payload to the API
+2. API Gateway forwards the request to Lambda
+3. Lambda validates and processes the request
+4. SNS publishes a notification to subscribed emails
   
 
 ## Tech Stack
@@ -19,12 +25,13 @@ A static frontend hosted on Amazon S3 sends event data to a REST API exposed thr
  - Amazon SNS – Email notifications
  - AWS IAM – Access control (least privilege)
  - AWS CloudFormation – Infrastructure as Code
- - Tools & Languages
- - Python (Lambda logic)
- - HTML, CSS, JavaScript (Frontend)
+ 
 
-### AWS CLI
- - boto3 (AWS SDK for Python)
+### Languages & Tools
+ - Python – Lambda business logic
+ - AWS CLI – Deployment & operations
+ - boto3 – AWS SDK for Python
+ - Git & GitHub – Version control
 
 ## How It Works
 #### Frontend flow
@@ -33,8 +40,24 @@ A static frontend hosted on Amazon S3 sends event data to a REST API exposed thr
  - Contains no AWS credentials or business logic  
 
 #### Backend flow
- - API Gateway receives requests and forwards them to Lambda
- -Lambda validates input, formats the message, and triggers SNS
+
+  -API Gateway exposes a POST /create-event endpoint
+  -Lambda receives the request via proxy integration
+  -Request body is parsed and validated
+  -A clean, dynamic email message is generated
+  -SNS sends notifications to confirmed subscribers
+
+#####  Input Validation & Error Handling
+The API handles common client errors:
+  -Missing request body
+  -Invalid JSON
+  -Missing required fields (title, date, description)
+
+Responses follow HTTP standards:
+  -200 OK → Event processed successfully
+  -400 Bad Request → Invalid input
+
+This ensures API professionalism and predictable behavior.
 
 #### Notifications
  - Amazon SNS broadcasts event announcements to subscribed email addresses
@@ -50,25 +73,39 @@ Benefits:
  - No manual console dependency
  - CloudFormation acts as the single source of truth for the system.
 
-## Security
+The stack includes:
+  -IAM role for Lambda
+  -SNS topic & subscriptions
+  -Lambda function
+  -API Gateway REST API
+
+## Security Consideration
  - IAM roles follow least-privilege principles
  - Lambda can only publish to the specific SNS topic it needs
  - No AWS credentials are exposed to the frontend
  - API Gateway acts as the controlled public entry point
+ - Email subscriptions require manual confirmation (SNS security model)
 
 ## Deployment (will be updated as project finishes updated due : 19 jan 2026)
 - Prerequisites
 - High-level deploy steps (no commands yet)
 
-## Design Decisions & Trade-offs
+## Design Decisions & Trade-offs (will be updated as project finishes updated due : 19 jan 2026)
 - Why serverless
 - Optional components explained
 
 ## What I Learned
-- Cloud concepts
-- Engineering mindset
+- Designing serverless architectures instead of writing ad-hoc code
+- Difference between infrastructure changes vs application code changes
+- CloudFormation stack lifecycle and rollback behavior
+- Debugging real AWS deployment issues using stack events
+- API Gateway → Lambda proxy integration
+- Secure IAM policy design
+- Event-driven communication using SNS
+- Importance of input validation and error handling in APIs
+- Real-world deployment workflows (artifacts, S3, updates)
 
-## Future Improvements
+## Future Improvements (will be updated as project finishes updated due : 19 jan 2026)
 - Auth
 - Persistence
 - Observability
