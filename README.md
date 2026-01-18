@@ -99,7 +99,7 @@ Backend services are provisioned first and validated independently before the fr
 -IAM permissions to create CloudFormation stacks, Lambda, API Gateway, SNS, and S3 resources
 
 
-#### Step 1: Deploy Backend Infrastructure (CloudFormation)
+### Step 1: Deploy Backend Infrastructure (CloudFormation)
 
   -All backend resources are provisioned using AWS CloudFormation.
 
@@ -117,7 +117,7 @@ This stack creates:
 
 Wait until the stack reaches CREATE_COMPLETE.
 
-##### Step 2: Confirm SNS Email Subscription
+### Step 2: Confirm SNS Email Subscription
 
 After stack creation:
 
@@ -126,7 +126,7 @@ After stack creation:
   -Confirm the subscription
   -Email notifications will not be delivered until this step is completed.
 
-#### Step 3: Configure CORS for Browser Access
+### Step 3: Configure CORS for Browser Access
 
 Since the frontend runs in a browser, Cross-Origin Resource Sharing (CORS) must be enabled to allow requests from the S3 website to the API Gateway endpoint.
 This project uses Lambda proxy integration, so CORS is handled inside the Lambda function rather than in API Gateway.
@@ -137,6 +137,7 @@ The Lambda function explicitly handles OPTIONS (preflight) requests
 All API responses include the required CORS headers
 
 Example headers returned by Lambda:
+
 ![example of lambda headers](snippets/example_headerofLambda.png)
 
 ##### Handling CORS at the Lambda layer ensures:
@@ -145,7 +146,7 @@ Example headers returned by Lambda:
   -Predictable browser behavior
   -Centralized response control
 
-#### Step 4: Test Backend Independently (API Validation)
+### Step 4: Test Backend Independently (API Validation)
 
 Before deploying the frontend, the backend is validated using curl:
 ![curl validation](<snippets/curl validation.png>)
@@ -157,7 +158,7 @@ Before deploying the frontend, the backend is validated using curl:
   -HTTP 200 OK
   -Confirmation email received via SNS
 
-#### Step 5: Deploy Frontend (S3 Static Website)
+### Step 5: Deploy Frontend (S3 Static Website)
 
 The frontend is hosted using Amazon S3 static website hosting.
 
@@ -176,7 +177,7 @@ styles.css
  -Apply a public read bucket policy
  -The S3 website endpoint becomes the public application URL.
 
-#### Step 6: End-to-End Application Test
+### Step 6: End-to-End Application Test
 
 Using the S3 website URL:
   -Open the application in a browser
@@ -192,9 +193,9 @@ Using the S3 website URL:
 
 #### This confirms the complete flow:
 
-##### Browser → S3 → API Gateway → Lambda → SNS → Email
+### Browser → S3 → API Gateway → Lambda → SNS → Email
 
-#### Step 7: Cleanup (Optional)
+### Step 7: Cleanup (Optional)
 
 To avoid unnecessary costs, the backend can be removed using:
 
@@ -216,14 +217,14 @@ CloudFormation safely deletes all associated resources.
 
 
 ## Design Decisions & Trade-offs (will be updated as project finishes updated due : 19 jan 2026)
-#### Why Serverless
+### Why Serverless
 
  -No server management
  -Automatic scaling
  -Cost-efficient for low-to-medium traffic
  -Faster development and iteration
 
-#### Trade-offs
+### Trade-offs
 
  -Cold starts (acceptable for this use case)
  -Stateless execution model
