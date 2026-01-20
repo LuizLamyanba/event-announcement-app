@@ -204,50 +204,50 @@ CloudFormation safely deletes all associated resources.
 
 #### Deployment Summary
 
- -Backend deployed using CloudFormation
+   - Backend deployed using CloudFormation
 
- -CORS handled at the Lambda layer for proxy integration
+   - CORS handled at the Lambda layer for proxy integration
 
- -Frontend hosted on S3 static website
+   - Frontend hosted on S3 static website
 
- -End-to-end flow tested using browser and curl
+   - End-to-end flow tested using browser and curl
 
- -Fully reproducible from source control
+   - Fully reproducible from source control
 
 
 
 ## Design Decisions & Trade-offs (will be updated as project finishes updated due : 19 jan 2026)
 ### Why Serverless
 
- -No server management
- -Automatic scaling
- -Cost-efficient for low-to-medium traffic
- -Faster development and iteration
+   - No server management
+   - Automatic scaling
+   - Cost-efficient for low-to-medium traffic
+   - Faster development and iteration
 
 ### Trade-offs
 
- -Cold starts (acceptable for this use case)
- -Stateless execution model
- -Vendor-specific services (documented and intentional)
- =Optional components such as persistence (DynamoDB) were intentionally excluded in v1 to keep the architecture minimal and focused.
+   - Cold starts (acceptable for this use case)
+   - Stateless execution model
+   - Vendor-specific services (documented and intentional)
+   - Optional components such as persistence (DynamoDB) were intentionally excluded in v1 to keep the architecture minimal and focused.
 
 ## What I Learned
- - Designing serverless architectures instead of writing ad-hoc code
- - Difference between infrastructure changes vs application code changes
- - CloudFormation stack lifecycle and rollback behavior
- - Debugging real AWS deployment issues using stack events
- - API Gateway → Lambda proxy integration
- - Secure IAM policy design
- - Event-driven communication using SNS
- - Importance of input validation and error handling in APIs
- - Real-world deployment workflows (artifacts, S3, updates)
+   - Designing serverless architectures instead of writing ad-hoc code
+   - Difference between infrastructure changes vs application code changes
+   - CloudFormation stack lifecycle and rollback behavior
+   - Debugging real AWS deployment issues using stack events
+   - API Gateway → Lambda proxy integration
+   - Secure IAM policy design
+   - Event-driven communication using SNS
+   - Importance of input validation and error handling in APIs
+   - Real-world deployment workflows (artifacts, S3, updates)
 
-## Future Improvements (will be updated as project finishes updated due : 19 jan 2026)
- - Authentication and authorization (Cognito)
- -Persistent event storage using DynamoDB
- -Observability with CloudWatch metrics and alarms
- -API throttling and request validation
- -CI/CD pipeline for automated deployments
+## Future Improvements 
+   - Authentication and authorization (Cognito)
+   - Persistent event storage using DynamoDB
+   - Observability with CloudWatch metrics and alarms
+   - API throttling and request validation
+   - CI/CD pipeline for automated deployments
 
 
 ## Project Status
